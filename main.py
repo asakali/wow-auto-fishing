@@ -20,7 +20,7 @@ import random
 import screen_cap, fishing_op
 
 debug = True
-RECAST_TIME = 30
+RECAST_TIME = 30 + 2
 DO_BAIT_TIME = 10 * 60 + 10
 
 if __name__ == "__main__":
@@ -31,10 +31,8 @@ if __name__ == "__main__":
 	
 	while True:
 		now = time.time()
-
+		
 		if GetWindowText(GetForegroundWindow()) == "魔兽世界":
-			fishing_op.do_bait()
-			break
 			if is_block == False:
 				lastx = 0
 				lasty = 0
@@ -79,7 +77,14 @@ if __name__ == "__main__":
 					b_y = int(dM01 / dArea)
 
 					if lastx > 0 and lasty > 0:
-						if abs(b_x - lastx) > 4 or abs(b_y - lasty) > 4:
+						offset_x = 4
+						offset_y = 4
+
+						if lasty < ((area[3] - area[1]) / 2):
+							offset_x = 3
+							offset_y = 3
+
+						if abs(b_x - lastx) > offset_x or abs(b_y - lasty) > offset_y:
 							fishing_op.snatch(area[0] + b_x, area[1] + b_y)
 							fishing_op.move_mouse_to_free_area()
 							is_block = False

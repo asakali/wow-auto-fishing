@@ -68,7 +68,7 @@ def generate_window(x1, y1, x2, y2, lower_range=None, upper_range=None):
 	mask = hsv_mask(hsv, lower_range, upper_range)
 	output = cv2.bitwise_and(hsv, hsv, mask=mask)
 	return mask, output
-
+	
 def window_area():
 	rect = GetWindowRect(GetForegroundWindow())
 	area = (0, 0, rect[2], rect[3])

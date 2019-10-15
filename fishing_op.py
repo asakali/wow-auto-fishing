@@ -2,9 +2,11 @@ import pyautogui, random, time
 import screen_cap, util
 
 def jump():
-	while random.random() < 0.2:
+	probability = random.uniform(0.05, 0.23)
+	
+	while random.random() < probability:
 		pyautogui.press(' ')
-		time.sleep(random.uniform(1.1, 3.5))
+		time.sleep(random.uniform(0.5, 1.8))
 
 def cast():
 	jump()
@@ -23,7 +25,7 @@ def move_mouse_to_free_area():
 	time.sleep(random.uniform(2.0, 3.3))
 	free_area_rectangle = screen_cap.free_area()
 	move_mouse_to(random.randint(free_area_rectangle[0], free_area_rectangle[2]), random.randint(free_area_rectangle[1], free_area_rectangle[3]))
-
+	
 def open_clam_shell():
 	exists = True
 	
@@ -64,12 +66,17 @@ def do_bait():
 			pyautogui.click(button='left')
 			time.sleep(random.uniform(6.5, 8))
 
-	pyautogui.press('esc')
-	times = random.randrange(1, 7, 2)
+	pyautogui.press('c')
+	time.sleep(random.uniform(0.1, 0.3))
+	
+	pyautogui.press('b')
+	time.sleep(random.uniform(0.5, 0.8))
+	
+	# times = random.randrange(2, 6, 2)
 
-	while times > 0:
-		time.sleep(random.uniform(0.3, 1))
-		pyautogui.press('esc')
-		times -= 1
-		
-	time.sleep(random.uniform(1.5, 2))
+	# while times > 0:
+	# 	time.sleep(random.uniform(0.2, 0.5))
+	# 	pyautogui.press('esc')
+	# 	times -= 1
+
+	# time.sleep(random.uniform(1.5, 2))
