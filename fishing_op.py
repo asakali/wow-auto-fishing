@@ -1,6 +1,8 @@
 import pyautogui, random, time
 import screen_cap, util
 
+pyautogui.FAILSAFE = False
+
 def jump():
 	probability = random.uniform(0.05, 0.23)
 	
@@ -15,6 +17,7 @@ def cast():
 def move_mouse_to(x, y):
 	pyautogui.moveTo(x, y, random.uniform(0.15, 0.35))
 
+	pyautogui.FAILSAFE
 def snatch(x, y):
 	pyautogui.moveTo(x, y, random.uniform(0.08, 0.15))
 

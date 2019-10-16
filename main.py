@@ -17,7 +17,7 @@ from datetime import datetime
 from win32gui import GetWindowText, GetForegroundWindow
 
 import random
-import screen_cap, fishing_op
+import screen_cap, fishing_op, util
 
 debug = True
 RECAST_TIME = 30 + 2
@@ -29,6 +29,8 @@ if __name__ == "__main__":
 	new_cast_time = 0
 	frame_count = 0
 	
+	util.set_work_dir()
+
 	while True:
 		now = time.time()
 		
@@ -63,15 +65,15 @@ if __name__ == "__main__":
 				#h_max = np.array((34, 255, 255), np.uint8)
 
 				#月光林地 60 53
-				#h_min = np.array((0, 0, 0), np.uint8)
-				#h_max = np.array((180, 255, 46), np.uint8)
+				h_min = np.array((0, 0, 0), np.uint8)
+				h_max = np.array((180, 255, 46), np.uint8)
 
 				#艾萨拉-破碎海岸 68 71
-				h_min = np.array((100, 43, 46), np.uint8)
-				h_max = np.array((124, 255, 255), np.uint8)
-
+				#h_min = np.array((100, 43, 46), np.uint8)
+				#h_max = np.array((124, 255, 255), np.uint8)
+				
 				mask = cv2.inRange(frame_hsv, h_min, h_max)
-
+				
 				# cv2.imshow('hsv',mask)
 				# cv2.waitKey()
 				# cv2.destroyAllWindows()

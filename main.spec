@@ -1,8 +1,26 @@
 # -*- mode: python ; coding: utf-8 -*-
+from glob import glob
+import os
 
 block_cipher = None
 
+##### include mydir in distribution #######
+def extra_datas(mydir):
+    def rec_glob(p, files):
+        import os
+        import glob
+        for d in glob.glob(p):
+            if os.path.isfile(d):
+                files.append(d)
+            rec_glob("%s/*" % d, files)
+    files = []
+    rec_glob("%s/*" % mydir, files)
+    extra_datas = []
+    for f in files:
+        extra_datas.append((f, f, 'DATA'))
 
+    return extra_datas
+###########################################
 a = Analysis(['main.py'],
              pathex=['F:\\source_code\\wow-fish-bot'],
              binaries=[],
@@ -15,6 +33,9 @@ a = Analysis(['main.py'],
              win_private_assemblies=False,
              cipher=block_cipher,
              noarchive=False)
+
+a.datas += extra_datas('images')
+
 pyz = PYZ(a.pure, a.zipped_data,
              cipher=block_cipher)
 exe = EXE(pyz,

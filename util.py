@@ -2,12 +2,33 @@ import cv2
 import numpy as np
 import screen_cap
 import time
+import os, sys
 
+work_dir = ""
+
+def set_work_dir():
+	global work_dir
+	
+	if hasattr(sys, "frozen"):# synchronize with pyloader's initialization.py
+		#work_dir = os.path.abspath(os.path.join(os.path.dirname(os.__file__),'..'))
+		work_dir = os.path.abspath(os.path.join(os.path.dirname(os.__file__)))
+	else:
+		work_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+
+def get_work_dir():
+	global work_dir
+	return work_dir
+	
 def find_match(img_rgb, prefix, max):
 	#print('Looking for float {}'.format(time.time()))
 	# todo: maybe make some universal float without background?  
-	for x in range(0, max):   
-		template = cv2.imread('images/' + prefix + '_' + str(x) + '.png', 0)	
+
+	images_path = os.path.join(get_work_dir(), 'images')
+	
+	for x in range(0, max):
+		target_path = images_path + '/' + prefix + '_' + str(x) + '.png'
+
+		template = cv2.imread(target_path, 0)	
 		img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
 
 		w, h = template.shape[::-1]
@@ -21,7 +42,7 @@ def find_match(img_rgb, prefix, max):
 		if loc[0].any():
 			if False:
 				print('Found ' + str(x) + ' ' + prefix)
-				cv2.imwrite('images/session_' + prefix + str(int(time.time())) + '_success.png', img_rgb)
+				cv2.imwrite(images_path + '/session_' + prefix + str(int(time.time())) + '_success.png', img_rgb)
 
 			return (loc[1][0] + w / 2), (loc[0][0] + h / 2)
 
