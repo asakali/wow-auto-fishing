@@ -58,8 +58,17 @@ if __name__ == "__main__":
 				frame = cv2.cvtColor(img_np, cv2.COLOR_BGR2RGB)
 				frame_hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
-				h_min = np.array((11, 43, 46), np.uint8)
-				h_max = np.array((34, 255, 255), np.uint8)
+				#辛特兰
+				#h_min = np.array((11, 43, 46), np.uint8)
+				#h_max = np.array((34, 255, 255), np.uint8)
+
+				#月光林地 60 53
+				#h_min = np.array((0, 0, 0), np.uint8)
+				#h_max = np.array((180, 255, 46), np.uint8)
+
+				#艾萨拉-破碎海岸 68 71
+				h_min = np.array((100, 43, 46), np.uint8)
+				h_max = np.array((124, 255, 255), np.uint8)
 
 				mask = cv2.inRange(frame_hsv, h_min, h_max)
 

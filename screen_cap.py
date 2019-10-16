@@ -83,7 +83,7 @@ def valid_area():
 
 def free_area():
 	fish_area = valid_area()
-	non_fish_area = (fish_area[0], 0, fish_area[2], fish_area[1])
+	non_fish_area = (int(fish_area[0]), 0, int(fish_area[2]), int(fish_area[1]))
 	
 	return non_fish_area
 

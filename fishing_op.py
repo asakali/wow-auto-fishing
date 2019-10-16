@@ -16,7 +16,7 @@ def move_mouse_to(x, y):
 	pyautogui.moveTo(x, y, random.uniform(0.15, 0.35))
 
 def snatch(x, y):
-	move_mouse_to(x, y)
+	pyautogui.moveTo(x, y, random.uniform(0.08, 0.15))
 
 	pyautogui.mouseDown(button='right')
 	pyautogui.mouseUp(button='right')
