@@ -18,6 +18,7 @@ from win32gui import GetWindowText, GetForegroundWindow
 
 import random
 import screen_cap, fishing_op, util
+import datetime
 
 debug = True
 RECAST_TIME = 30 + 2
@@ -44,12 +45,12 @@ if __name__ == "__main__":
 					fishing_op.do_bait()
 					fishing_op.open_clam_shell()
 					begin_time = now
-
+				
 				fishing_op.cast()
 				
 				new_cast_time = now
 				is_block = True
-
+				
 				#Here sleep at least 3 second for bobber disapper
 				time.sleep(random.uniform(3, 4.5))
 			else:
@@ -60,13 +61,14 @@ if __name__ == "__main__":
 				frame = cv2.cvtColor(img_np, cv2.COLOR_BGR2RGB)
 				frame_hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
-				#辛特兰
-				#h_min = np.array((11, 43, 46), np.uint8)
-				#h_max = np.array((34, 255, 255), np.uint8)
-
-				#月光林地 60 53
-				h_min = np.array((0, 0, 0), np.uint8)
-				h_max = np.array((180, 255, 46), np.uint8)
+				if datetime.datetime.now().hour < 0:
+					#辛特兰	热砂岗
+					h_min = np.array((11, 43, 46), np.uint8)
+					h_max = np.array((25, 255, 255), np.uint8)
+				else:
+					#月光林地 60 53
+					h_min = np.array((0, 0, 0), np.uint8)
+					h_max = np.array((180, 255, 46), np.uint8)
 
 				#艾萨拉-破碎海岸 68 71
 				#h_min = np.array((100, 43, 46), np.uint8)
@@ -88,12 +90,12 @@ if __name__ == "__main__":
 					b_y = int(dM01 / dArea)
 
 					if lastx > 0 and lasty > 0:
-						offset_x = 4
-						offset_y = 4
+						offset_x = 5
+						offset_y = 5
 
 						if lasty < ((area[3] - area[1]) / 2):
-							offset_x = 3
-							offset_y = 3
+							offset_x = 4
+							offset_y = 4
 
 						if abs(b_x - lastx) > offset_x or abs(b_y - lasty) > offset_y:
 							fishing_op.snatch(area[0] + b_x, area[1] + b_y)

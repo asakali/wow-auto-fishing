@@ -8,7 +8,9 @@ def jump():
 	
 	while random.random() < probability:
 		pyautogui.press(' ')
-		time.sleep(random.uniform(0.5, 1.8))
+		time.sleep(random.uniform(0.05, 0.5))
+	
+	time.sleep(random.uniform(0.5, 1))
 
 def cast():
 	jump()

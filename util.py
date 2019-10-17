@@ -13,7 +13,7 @@ def set_work_dir():
 		#work_dir = os.path.abspath(os.path.join(os.path.dirname(os.__file__),'..'))
 		work_dir = os.path.abspath(os.path.join(os.path.dirname(os.__file__)))
 	else:
-		work_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+		work_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "."))
 
 def get_work_dir():
 	global work_dir
@@ -24,10 +24,11 @@ def find_match(img_rgb, prefix, max):
 	# todo: maybe make some universal float without background?  
 
 	images_path = os.path.join(get_work_dir(), 'images')
-	
-	for x in range(0, max):
-		target_path = images_path + '/' + prefix + '_' + str(x) + '.png'
+	print(images_path)
 
+	for x in range(0, max):
+		target_path = os.path.join(images_path, prefix + '_' + str(x) + '.png')
+		print(target_path)
 		template = cv2.imread(target_path, 0)	
 		img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
 
