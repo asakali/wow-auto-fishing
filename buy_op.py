@@ -36,6 +36,10 @@ def buy_fuwenbubao():
 			count -= 1
 
 def find_npc():
+	if random.random() < 0.1:
+		util.move_mouse_to_center()
+		pyautogui.click(button = 'left', clicks = 3, interval = random.uniform(0.1, 0.2))
+
 	pyautogui.press('`')
 	time.sleep(random.uniform(0.5, 0.6))
 	buy_fuwenbubao()
@@ -67,6 +71,6 @@ def next_page():
 def working(now):
 	global lasttime
 	
-	if now - lasttime > random.uniform(0.8, 1.2):
+	if now - lasttime > random.uniform(0.1, 0.3):
 		find_npc()
 		lasttime = now

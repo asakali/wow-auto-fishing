@@ -71,13 +71,13 @@ def find_drawing(threshold):
 
 def find_lastpage():
 	return find_match(screen_cap.screen_img_np(), 'lastpage', 0 + 1)
-
+	
 def find_nextpage():
 	return find_match(screen_cap.screen_img_np(), 'nextpage', 0 + 1)
 	
 def find_money(threshold):
 	return find_match(screen_cap.screen_left(), 'money', 1 + 1, threshold)
-
+	
 def find_npc():
 	return find_match(screen_cap.screen_img_np(), 'npc', 0 + 1)
 
@@ -88,7 +88,11 @@ def jump():
 		pyautogui.press(' ')
 		time.sleep(random.uniform(0.05, 0.5))
 
-	time.sleep(random.uniform(0.5, 1))
+	time.sleep(random.uniform(1.5, 2))
+
+def move_mouse_to_center():
+	area = screen_cap.window_area()
+	pyautogui.moveTo(int(area[2] / 2), int(area[3] / 2) + 50, random.uniform(0.1, 0.5))
 
 def move_mouse_rand():
 	area = screen_cap.window_area()
