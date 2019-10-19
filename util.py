@@ -20,7 +20,7 @@ def get_work_dir():
 	global work_dir
 	return work_dir
 	
-def find_match(img_rgb, prefix, max):
+def find_match(img_rgb, prefix, max, threshold = 0.85):
 	#print('Looking for float {}'.format(time.time()))
 	# todo: maybe make some universal float without background?  
 
@@ -31,10 +31,9 @@ def find_match(img_rgb, prefix, max):
 
 		template = cv2.imread(target_path, 0)	
 		img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
-		
+
 		w, h = template.shape[::-1]
 		res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
-		threshold = 0.9
 		loc = np.where( res >= threshold)
 
 		for pt in zip(*loc[::-1]):
@@ -67,17 +66,17 @@ def find_rod():
 def find_bait():
 	return find_match(screen_cap.screen_img_np(), 'bait', 0 + 1)
 
-def find_drawing():
-	return find_match(screen_cap.screen_img_np(), 'drawing', 0 + 1)
+def find_drawing(threshold):
+	return find_match(screen_cap.screen_left(), 'drawing', 0 + 1, threshold)
 
 def find_lastpage():
 	return find_match(screen_cap.screen_img_np(), 'lastpage', 0 + 1)
 
 def find_nextpage():
 	return find_match(screen_cap.screen_img_np(), 'nextpage', 0 + 1)
-
-def find_money():
-	return find_match(screen_cap.screen_img_np(), 'money', 1 + 1)
+	
+def find_money(threshold):
+	return find_match(screen_cap.screen_left(), 'money', 1 + 1, threshold)
 
 def find_npc():
 	return find_match(screen_cap.screen_img_np(), 'npc', 0 + 1)
@@ -91,6 +90,6 @@ def jump():
 
 	time.sleep(random.uniform(0.5, 1))
 
-def move_mouse_to_center():
+def move_mouse_rand():
 	area = screen_cap.window_area()
-	pyautogui.moveTo(int(area[2] / 2), int(area[3] / 2) + 50, random.uniform(0.1, 0.5))
+	pyautogui.moveTo(random.randint(area[0], area[2]), random.randint(area[1], area[3]), random.uniform(0.15, 0.25))

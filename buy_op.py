@@ -10,55 +10,55 @@ tessdata_dir_config = '--tessdata-dir "E:\\Program Files\\Tesseract-OCR\\tessdat
 
 def buy_fuwenbubao():
 	count = 3
+	nextpage_place = util.find_nextpage()
 	
-	while count > 0:
-		place = util.find_drawing()
+	if nextpage_place:
+		pyautogui.moveTo(nextpage_place[0], nextpage_place[1], random.uniform(0.01, 0.03))
 		
-		if place:
-			place = util.find_money()
+		while count > 0:
+			place = util.find_drawing(0.87)
 			
 			if place:
-				pyautogui.moveTo(place[0] - 70, place[1] - 30, random.uniform(0.01, 0.05))
-				pyautogui.click(button = 'right', clicks = 3, interval = random.uniform(0.1, 0.2))
-
-				# image = screen_cap.screen_rectangle(place[0], place[1] - 280, place[0] + 350, place[1])
-				# text = pytesseract.image_to_string(Image.fromarray(image), lang='chi_sim', config = tessdata_dir_config)
-				# print(text)
+				print("found drawing")
+				place = util.find_money(0.92)
 				
-				time.sleep(random.uniform(1, 5))
+				if place:
+					print("found money")
+					pyautogui.moveTo(place[0] - 70, place[1] - 30, random.uniform(0.01, 0.05))
+					pyautogui.click(button = 'right', clicks = 3, interval = random.uniform(0.1, 0.2))
 
-		time.sleep(random.uniform(0.01, 0.05))
-		count -= 1
+					break
+					# image = screen_cap.screen_rectangle(place[0], place[1] - 280, place[0] + 350, place[1])
+					# text = pytesseract.image_to_string(Image.fromarray(image), lang='chi_sim', config = tessdata_dir_config)
+					# print(text)
 
-		if not next_page():
-			return
+			pyautogui.click(button = 'left')
+			count -= 1
 
 def find_npc():
-	util.move_mouse_to_center()
-
-	#open trade dialog
-	pyautogui.click(button = 'right', clicks = 3, interval = random.uniform(0.1, 0.2))
-
+	pyautogui.press('`')
+	time.sleep(random.uniform(0.5, 0.6))
 	buy_fuwenbubao()
 	pyautogui.press('esc')
-
+	
+	util.move_mouse_rand()
 	util.jump()
 	
 def last_page():
 	place = util.find_lastpage()
 	
 	if place:
-		pyautogui.moveTo(place[0], place[1], random.uniform(0.05, 0.1))
+		pyautogui.moveTo(place[0], place[1], random.uniform(0.01, 0.03))
 		pyautogui.click(button = 'left')
-		pyautogui.moveTo(place[0] + random.randint(100, 200), place[1] + random.randint(100, 200), random.uniform(0.05, 0.1))
+		pyautogui.moveTo(place[0] + random.randint(100, 200), place[1] + random.randint(100, 200), random.uniform(0.01, 0.03))
 
 def next_page():
 	place = util.find_nextpage()
 	
 	if place:
-		pyautogui.moveTo(place[0], place[1], random.uniform(0.05, 0.1))
+		pyautogui.moveTo(place[0], place[1], random.uniform(0.01, 0.03))
 		pyautogui.click(button = 'left')
-		pyautogui.moveTo(place[0] + random.randint(100, 200), place[1] + random.randint(100, 200), random.uniform(0.05, 0.1))
+		pyautogui.moveTo(place[0] + random.randint(100, 200), place[1] + random.randint(100, 200), random.uniform(0.01, 0.03))
 		
 		return True
 
@@ -67,6 +67,6 @@ def next_page():
 def working(now):
 	global lasttime
 	
-	if now - lasttime > random.uniform(1, 1.5):
+	if now - lasttime > random.uniform(0.8, 1.2):
 		find_npc()
 		lasttime = now
