@@ -31,7 +31,7 @@ def find_match(img_rgb, prefix, max, threshold = 0.85):
 
 		template = cv2.imread(target_path, 0)	
 		img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
-
+		
 		w, h = template.shape[::-1]
 		res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
 		loc = np.where( res >= threshold)
@@ -76,24 +76,72 @@ def find_nextpage():
 	return find_match(screen_cap.screen_img_np(), 'nextpage', 0 + 1)
 	
 def find_money(threshold):
-	return find_match(screen_cap.screen_left(), 'money', 1 + 1, threshold)
+	return find_match(screen_cap.screen_left(), 'money', 0 + 1, threshold)
 	
 def find_npc():
 	return find_match(screen_cap.screen_img_np(), 'npc', 0 + 1)
 
+def find_lianjin_formula(threshold):
+	return find_match(screen_cap.screen_left(), 'lianjin', 2 + 1, threshold)
+
+def find_role_select_button():
+	return find_match(screen_cap.screen_img_np(), 'role_select_button', 0 + 1)
+
+def find_role():
+	return find_match(screen_cap.screen_img_np(), 'role', 0 + 1)
+
 def jump():
-	probability = random.uniform(0.01, 0.015)
+	probability = random.uniform(0.03, 0.05)
 	
 	while random.random() < probability:
 		pyautogui.press(' ')
-		time.sleep(random.uniform(0.05, 0.5))
+		time.sleep(random.uniform(1.2, 1.5))
 
-	time.sleep(random.uniform(1.5, 2))
+def do_move(key, hold_time):
+    start = time.time()
+    while time.time() - start < hold_time:
+        pyautogui.press(key)
+
+def move_on():
+	probability = random.uniform(0.03, 0.05)
+	
+	while random.random() < probability:
+		do_move("w", probability)
+		do_move("s", probability)
+		do_move("a", probability)
+		do_move("d", probability)
+		time.sleep(random.uniform(1.2, 1.5))
 
 def move_mouse_to_center():
 	area = screen_cap.window_area()
-	pyautogui.moveTo(int(area[2] / 2), int(area[3] / 2) + 50, random.uniform(0.1, 0.5))
+	pyautogui.moveTo(int(area[2] / 2), int(area[3] / 2) + random.randint(10, 20), random.uniform(0.1, 0.5))
 
 def move_mouse_rand():
 	area = screen_cap.window_area()
 	pyautogui.moveTo(random.randint(area[0], area[2]), random.randint(area[1], area[3]), random.uniform(0.15, 0.25))
+	
+def change_account():
+	while True:
+		place = find_role_select_button()
+
+		if place:
+			pyautogui.moveTo(place[0], place[1], random.uniform(0.1, 0.5))
+			pyautogui.click(button = 'left')
+			time.sleep(random.uniform(25, 30))
+
+			place = find_role()
+
+			if place:
+				pyautogui.moveTo(place[0], place[1], random.uniform(0.1, 0.5))
+				pyautogui.click(button = 'left', clicks = 2)
+				time.sleep(random.uniform(15, 25))
+				
+				#pyautogui.hotkey('shift', 'tab')
+				
+				move_mouse_to_center()
+				pyautogui.click(button = 'left')
+				break
+		else:
+			time.sleep(random.uniform(1, 1.5))
+			pyautogui.press('esc')
+			time.sleep(random.uniform(1, 1.5))
