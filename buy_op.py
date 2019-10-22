@@ -66,7 +66,7 @@ def find_npc_1():
 
 	buy_npc_1()
 	end_buy_op()
-
+	
 def end_buy_op():
 	time.sleep(random.uniform(0.2, 0.3))
 	pyautogui.press('esc')
@@ -81,7 +81,7 @@ def last_page():
 		pyautogui.moveTo(place[0], place[1], random.uniform(0.01, 0.03))
 		pyautogui.click(button = 'left')
 		pyautogui.moveTo(place[0] + random.randint(100, 200), place[1] + random.randint(100, 200), random.uniform(0.01, 0.03))
-
+		
 def next_page():
 	place = util.find_nextpage()
 	
