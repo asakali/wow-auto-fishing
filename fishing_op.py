@@ -1,5 +1,9 @@
 import pyautogui, random, time
 import screen_cap, util
+import numpy as np
+import cv2
+from PIL import ImageGrab
+from datetime import datetime
 
 pyautogui.FAILSAFE = False
 
@@ -10,6 +14,8 @@ is_block = False
 begin_time = time.time()
 new_cast_time = 0
 frame_count = 0
+lastx = 0
+lasty = 0
 
 def cast():
 	util.jump()
@@ -19,6 +25,7 @@ def move_mouse_to(x, y):
 	pyautogui.moveTo(x, y, random.uniform(0.15, 0.35))
 
 	pyautogui.FAILSAFE
+
 def snatch(x, y):
 	pyautogui.moveTo(x, y, random.uniform(0.08, 0.15))
 
@@ -29,7 +36,7 @@ def move_mouse_to_free_area():
 	time.sleep(random.uniform(2.0, 3.3))
 	free_area_rectangle = screen_cap.free_area()
 	move_mouse_to(random.randint(free_area_rectangle[0], free_area_rectangle[2]), random.randint(free_area_rectangle[1], free_area_rectangle[3]))
-	
+
 def open_clam_shell():
 	exists = True
 	
@@ -49,6 +56,39 @@ def open_clam_shell():
 	time.sleep(random.uniform(1.5, 3))
 	pyautogui.press('b')
 	
+def throw_rubbish():
+	exists = True
+	
+	pyautogui.press('b')
+	time.sleep(random.uniform(1.5, 3))
+	
+	while exists:
+		place = util.find_rubbish()
+
+		if place:
+			pyautogui.moveTo(place[0], place[1], random.uniform(0.1, 0.3))
+			pyautogui.click(button='left')
+			time.sleep(random.uniform(0.2, 0.4))
+
+			util.move_mouse_to_center()
+			pyautogui.click(button='left')
+			time.sleep(random.uniform(0.2, 0.4))
+
+			place = util.find_button_yes(0.75)
+			
+			if place:
+				pyautogui.moveTo(place[0], place[1], random.uniform(0.1, 0.3))
+				pyautogui.click(button='left')
+				time.sleep(random.uniform(0.2, 0.4))
+			else:
+				print("not found button yes")
+		else:
+			print("not found rubbish")
+			exists = False
+
+	time.sleep(random.uniform(1.5, 3))
+	pyautogui.press('b')
+
 def do_bait():
 	pyautogui.press('c')
 	time.sleep(random.uniform(0.1, 0.3))
@@ -90,7 +130,9 @@ def working(now):
 	global begin_time
 	global new_cast_time
 	global frame_count
-
+	global lastx
+	global lasty
+	
 	if is_block == False:
 		lastx = 0
 		lasty = 0
@@ -99,6 +141,7 @@ def working(now):
 		if now - begin_time > DO_BAIT_TIME:
 			do_bait()
 			open_clam_shell()
+			throw_rubbish()
 			begin_time = now
 		
 		cast()
@@ -116,7 +159,7 @@ def working(now):
 		frame = cv2.cvtColor(img_np, cv2.COLOR_BGR2RGB)
 		frame_hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
-		if datetime.datetime.now().hour < 0:
+		if datetime.now().hour < 0:
 			#辛特兰	热砂岗
 			h_min = np.array((11, 43, 46), np.uint8)
 			h_max = np.array((25, 255, 255), np.uint8)
@@ -131,9 +174,9 @@ def working(now):
 		
 		mask = cv2.inRange(frame_hsv, h_min, h_max)
 		
-		cv2.imshow('hsv',mask)
-		cv2.waitKey()
-		cv2.destroyAllWindows()
+		# cv2.imshow('hsv',mask)
+		# cv2.waitKey()
+		# cv2.destroyAllWindows()
 
 		moments = cv2.moments(mask, 1)
 		dM01 = moments['m01']

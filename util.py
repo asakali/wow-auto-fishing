@@ -60,6 +60,9 @@ def find_feather():
 def find_shell():
 	return find_match(screen_cap.screen_img_np(), 'shell', 0 + 1)
 
+def find_rubbish():
+	return find_match(screen_cap.screen_img_np(), 'rubbish', 1 + 1)
+
 def find_rod():
 	return find_match(screen_cap.screen_img_np(), 'rod', 0 + 1)
 
@@ -85,10 +88,13 @@ def find_lianjin_formula(threshold):
 	return find_match(screen_cap.screen_left(), 'lianjin', 2 + 1, threshold)
 
 def find_role_select_button():
-	return find_match(screen_cap.screen_img_np(), 'role_select_button', 0 + 1)
+	return find_match(screen_cap.screen_img_np(), 'role_select_button', 1 + 1)
 
 def find_role():
 	return find_match(screen_cap.screen_img_np(), 'role', 0 + 1)
+
+def find_button_yes(threshold):
+	return find_match(screen_cap.screen_img_np(), 'buttonyes', 0 + 1, threshold)
 
 def jump():
 	probability = random.uniform(0.03, 0.05)
@@ -145,3 +151,4 @@ def change_account():
 			time.sleep(random.uniform(1, 1.5))
 			pyautogui.press('esc')
 			time.sleep(random.uniform(1, 1.5))
+			print("Not Found role select button")
