@@ -61,7 +61,7 @@ def find_shell():
 	return find_match(screen_cap.screen_img_np(), 'shell', 0 + 1)
 
 def find_rubbish():
-	return find_match(screen_cap.screen_img_np(), 'rubbish', 2 + 1)
+	return find_match(screen_cap.screen_img_np(), 'rubbish', 3 + 1)
 
 def find_rod():
 	return find_match(screen_cap.screen_img_np(), 'rod', 0 + 1)
