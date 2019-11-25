@@ -17,9 +17,21 @@ frame_count = 0
 lastx = 0
 lasty = 0
 
+stat = {
+	"do_bait": 0,
+	"casting": 0,
+	"catch": 0,
+	"throw_rubbish": 0,
+	"open_shell": 0
+}
+
 def cast():
+	global stat
+
 	util.jump()
 	pyautogui.press('`')
+
+	stat["casting"] = stat["casting"] + 1
 
 def move_mouse_to(x, y):
 	pyautogui.moveTo(x, y, random.uniform(0.15, 0.35))
@@ -38,18 +50,19 @@ def move_mouse_to_free_area():
 	move_mouse_to(random.randint(free_area_rectangle[0], free_area_rectangle[2]), random.randint(free_area_rectangle[1], free_area_rectangle[3]))
 
 def open_clam_shell():
+	global stat
 	exists = True
 	
 	pyautogui.press('b')
 	time.sleep(random.uniform(1.5, 3))
 	
 	while exists:
-		place = util.find_shell()
+		place = util.find_shell(0.8)
 
 		if place:
 			snatch(*place)
 			time.sleep(random.uniform(1, 2))
-			print("open shell!!")
+			stat["open_shell"] = stat["open_shell"] + 1
 		else:
 			exists = False
 
@@ -57,6 +70,7 @@ def open_clam_shell():
 	pyautogui.press('b')
 	
 def throw_rubbish():
+	global stat
 	exists = True
 	
 	pyautogui.press('b')
@@ -74,41 +88,47 @@ def throw_rubbish():
 			pyautogui.click(button='left')
 			time.sleep(random.uniform(0.2, 0.4))
 
-			place = util.find_button_yes(0.75)
+			place_yes = util.find_button_yes(0.75)
 			
-			if place:
-				pyautogui.moveTo(place[0], place[1], random.uniform(0.1, 0.3))
+			if place_yes:
+				pyautogui.moveTo(place_yes[0], place_yes[1], random.uniform(0.1, 0.3))
 				pyautogui.click(button='left')
 				time.sleep(random.uniform(0.2, 0.4))
+
+				stat["throw_rubbish"] = stat["throw_rubbish"] + 1
 			else:
 				print("not found button yes")
 		else:
 			print("not found rubbish")
 			exists = False
 
+		time.sleep(random.uniform(0.2, 0.4))
+
 	time.sleep(random.uniform(1.5, 3))
 	pyautogui.press('b')
 
 def do_bait():
+	global stat
 	pyautogui.press('c')
 	time.sleep(random.uniform(0.1, 0.3))
 
 	pyautogui.press('b')
 	time.sleep(random.uniform(0.5, 0.8))
 
-	place = util.find_bait()
+	place = util.find_bait(0.8)
 
 	if place:
 		pyautogui.moveTo(place[0], place[1], random.uniform(0.1, 0.3))
 		pyautogui.click(button='right')
 		time.sleep(random.uniform(0.2, 0.4))
 		
-		place = util.find_rod()
+		place_rod = util.find_rod(0.8)
 		
-		if place:
-			pyautogui.moveTo(place[0], place[1], random.uniform(0.15, 0.4))
+		if place_rod:
+			pyautogui.moveTo(place_rod[0], place_rod[1], random.uniform(0.15, 0.4))
 			pyautogui.click(button='left')
 			time.sleep(random.uniform(6.5, 8))
+			stat["do_bait"] = stat["do_bait"] + 1
 
 	pyautogui.press('c')
 	time.sleep(random.uniform(0.1, 0.3))
@@ -125,14 +145,15 @@ def do_bait():
 
 	# time.sleep(random.uniform(1.5, 2))
 
-def working(now):
+def working(now, auto_throw, color):
 	global is_block
 	global begin_time
 	global new_cast_time
 	global frame_count
 	global lastx
 	global lasty
-	
+	global stat
+
 	if is_block == False:
 		lastx = 0
 		lasty = 0
@@ -141,9 +162,19 @@ def working(now):
 		if now - begin_time > DO_BAIT_TIME:
 			do_bait()
 			open_clam_shell()
-			throw_rubbish()
+			
+			if auto_throw:
+				throw_rubbish()
+
 			begin_time = now
-		
+
+			print("now:{} cast:{} catch:{} shell:{} throw:{} bait:{}".format(datetime.now(), 
+																	stat["casting"], 
+																	stat["catch"], 
+																	stat["open_shell"], 
+																	stat["throw_rubbish"], 
+																	stat["do_bait"]))
+
 		cast()
 		
 		new_cast_time = now
@@ -158,15 +189,22 @@ def working(now):
 		
 		frame = cv2.cvtColor(img_np, cv2.COLOR_BGR2RGB)
 		frame_hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-
-		if datetime.now().hour < 0:
-			#辛特兰	热砂岗
-			h_min = np.array((11, 43, 46), np.uint8)
-			h_max = np.array((25, 255, 255), np.uint8)
-		else:
+		
+		if color == 'black':
 			#月光林地 60 53
 			h_min = np.array((0, 0, 0), np.uint8)
 			h_max = np.array((180, 255, 46), np.uint8)
+		elif color == 'orange':
+			#热砂岗  橙色
+			h_min = np.array((11, 43, 46), np.uint8)
+			h_max = np.array((25, 255, 255), np.uint8)
+		elif color == 'yellow':
+			h_min = np.array((26, 43, 46), np.uint8)
+			h_max = np.array((34, 255, 255), np.uint8)
+		else:
+			#红色
+			h_min = np.array((0, 43, 46), np.uint8)
+			h_max = np.array((10, 255, 255), np.uint8)
 
 		#艾萨拉-破碎海岸 68 71
 		#h_min = np.array((100, 43, 46), np.uint8)
@@ -188,18 +226,21 @@ def working(now):
 			b_y = int(dM01 / dArea)
 
 			if lastx > 0 and lasty > 0:
-				offset_x = 5
-				offset_y = 5
+				offset_x = 6
+				offset_y = 6
 
+				#在上方
 				if lasty < ((area[3] - area[1]) / 2):
-					offset_x = 4
-					offset_y = 4
+					offset_x = 5
+					offset_y = 5
 
 				if abs(b_x - lastx) > offset_x or abs(b_y - lasty) > offset_y:
+					#print(abs(b_x - lastx), offset_x, abs(b_y - lasty), offset_y)
 					snatch(area[0] + b_x, area[1] + b_y)
 					move_mouse_to_free_area()
 					is_block = False
-					print("catch something!!")
+
+					stat["catch"] = stat["catch"] + 1
 
 			if frame_count % 4 == 0:
 				lastx = b_x

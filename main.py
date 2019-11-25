@@ -22,15 +22,20 @@ if __name__ == "__main__":
 	
 	parser = argparse.ArgumentParser()
 	parser.add_argument("action", help="given action", type = str)
+	parser.add_argument('--throw', action='store_true', help='whether throw rubbish(default: no)')
+	parser.add_argument('-c', dest = 'color', default='red', help='Float color support(red | orange | yellow | black)(default: red)')
 
 	args = parser.parse_args()
+
+	print("------ Auto throw rubbish {} ------".format("Enable" if args.throw else "Disable"))
+	print("------ Float Color {} ------".format(args.color))
 
 	while True:
 		now = time.time()
 		
 		if GetWindowText(GetForegroundWindow()) == "魔兽世界":
 			if args.action == "fishing":
-				fishing_op.working(now)
+				fishing_op.working(now, args.throw, args.color)
 			
 			if args.action == "buy":
 				buy_op.working(now)

@@ -28,23 +28,27 @@ def find_match(img_rgb, prefix, max, threshold = 0.85):
 
 	for x in range(0, max):
 		target_path = os.path.join(images_path, prefix + '_' + str(x) + '.png')
-
 		template = cv2.imread(target_path, 0)	
 		img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
 		
-		w, h = template.shape[::-1]
-		res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
-		loc = np.where( res >= threshold)
+		print(target_path, template)
+		
+		try:
+			w, h = template.shape[::-1]
+			res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
+			loc = np.where( res >= threshold)
 
-		for pt in zip(*loc[::-1]):
-			cv2.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0,0,255), 2)
+			for pt in zip(*loc[::-1]):
+				cv2.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0,0,255), 2)
 
-		if loc[0].any():
-			if False:
-				print('Found ' + str(x) + ' ' + prefix)
-				cv2.imwrite(images_path + '/session_' + prefix + str(int(time.time())) + '_success.png', img_rgb)
+			if loc[0].any():
+				if False:
+					print('Found ' + str(x) + ' ' + prefix)
+					cv2.imwrite(images_path + '/session_' + prefix + str(int(time.time())) + '_success.png', img_rgb)
 
-			return (loc[1][0] + w / 2), (loc[0][0] + h / 2)
+				return (loc[1][0] + w / 2), (loc[0][0] + h / 2)
+		except Exception as e:
+			print(e)
 
 	return None
 	
@@ -57,17 +61,17 @@ def find_loud():
 def find_feather():
 	return find_match(screen_cap.screen_img_np(), 'feather', 2 + 1)
 
-def find_shell():
-	return find_match(screen_cap.screen_img_np(), 'shell', 0 + 1)
+def find_shell(threshold):
+	return find_match(screen_cap.screen_img_np(), 'shell', 3 + 1, threshold)
 
 def find_rubbish():
-	return find_match(screen_cap.screen_img_np(), 'rubbish', 3 + 1)
+	return find_match(screen_cap.screen_img_np(), 'rubbish', 6 + 1)
 
-def find_rod():
-	return find_match(screen_cap.screen_img_np(), 'rod', 0 + 1)
+def find_rod(threshold):
+	return find_match(screen_cap.screen_img_np(), 'rod', 1 + 1, threshold)
 
-def find_bait():
-	return find_match(screen_cap.screen_img_np(), 'bait', 0 + 1)
+def find_bait(threshold):
+	return find_match(screen_cap.screen_img_np(), 'bait', 1 + 1, threshold)
 
 def find_drawing(threshold):
 	return find_match(screen_cap.screen_left(), 'drawing', 0 + 1, threshold)
@@ -94,7 +98,7 @@ def find_role():
 	return find_match(screen_cap.screen_img_np(), 'role', 0 + 1)
 
 def find_button_yes(threshold):
-	return find_match(screen_cap.screen_img_np(), 'buttonyes', 0 + 1, threshold)
+	return find_match(screen_cap.screen_img_np(), 'buttonyes', 1 + 1, threshold)
 
 def jump():
 	probability = random.uniform(0.03, 0.05)
