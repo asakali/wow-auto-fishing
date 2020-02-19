@@ -100,8 +100,8 @@ def find_role():
 def find_button_yes(threshold):
 	return find_match(screen_cap.screen_img_np(), 'buttonyes', 1 + 1, threshold)
 
-def jump():
-	probability = random.uniform(0.03, 0.05)
+def jump(min = 0.03, max = 0.05):
+	probability = random.uniform(min, max)
 	
 	while random.random() < probability:
 		pyautogui.press(' ')
