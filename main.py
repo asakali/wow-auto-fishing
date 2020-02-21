@@ -13,7 +13,7 @@ from datetime import datetime
 from win32gui import GetWindowText, GetForegroundWindow
 
 import random
-import screen_cap, fishing_op, buy_op, unlock_op, jump_op, util
+import screen_cap, fishing_op, buy_op, unlock_op, jump_op, attack_op, util
 import datetime
 import argparse
 
@@ -45,6 +45,9 @@ if __name__ == "__main__":
 
 			if args.action == "jump":
 				jump_op.working(now)
+			
+			if args.action == "attack":
+				attack_op.working(now)
 				
 		# if cv2.waitKey(1) == 27:
 		# 	break

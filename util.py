@@ -112,8 +112,8 @@ def do_move(key, hold_time):
     while time.time() - start < hold_time:
         pyautogui.press(key)
 
-def move_on():
-	probability = random.uniform(0.03, 0.05)
+def move_on(min = 0.03, max = 0.05):
+	probability = random.uniform(min, max)
 	
 	while random.random() < probability:
 		do_move("w", probability)
