@@ -124,7 +124,7 @@ def move_on(min = 0.03, max = 0.05):
 
 def move_mouse_to_center_up():
 	area = screen_cap.window_area()
-	pyautogui.moveTo(int(area[2] / 2), int(area[3] / 2) - random.randint(50, 150), random.uniform(0.1, 0.5))
+	pyautogui.moveTo(int(area[2] / 2), int(area[3] / 2) - random.randint(50, 120), random.uniform(0.1, 0.5))
 
 def move_mouse_to_center():
 	area = screen_cap.window_area()

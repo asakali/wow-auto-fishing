@@ -4,19 +4,17 @@ import pyautogui
 import time
 
 loop_ts = 0
-skills = [("1"), ("4"), ("3"), ("t"), ("z"), ("5"), ("6"), 
+skills = [("7"), ("2"), ("T"), ("T"), ("T"), ("T"), ("T"), ("T"), ("T"),
 	("shift", "1"), 
+	("shift", "2"), 
 	("shift", "3"), 
 	("shift", "5"), 
-	("alt", "1"), 
-	("alt", "2"),
-	("alt", "3"), 
-	("alt", "4")]
+	("alt", "5")]
 
 def working(now):
 	global loop_ts
 
-	if now - loop_ts > random.uniform(2.5, 5):
+	if now - loop_ts > random.uniform(2.5, 4):
 		pyautogui.press('tab')
 		s = random.choice(skills)
 
@@ -29,7 +27,7 @@ def working(now):
 			util.move_mouse_rand()
 		elif random.random() < random.uniform(0, 0.1):
 			pyautogui.press(' ')
-		elif random.random() < random.uniform(0, 0.5):
+		elif random.random() < random.uniform(0, 0.3):
 			util.move_mouse_to_center_up()
 			i = 0
 			
