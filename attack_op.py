@@ -4,10 +4,8 @@ import pyautogui
 import time
 
 loop_ts = 0
-skills = [("7"), ("2"), ("T"), ("T"), ("T"), ("T"), ("T"), ("T"), ("T"),
-	("shift", "1"), 
-	("shift", "2"), 
-	("shift", "3"), 
+skills = [("7"), ("2"), ("T"), ("T"), ("T"), ("T"),
+	("shift", "1"), ("shift", "1"), ("shift", "1"), ("shift", "1"), 
 	("shift", "5"), 
 	("alt", "5")]
 
